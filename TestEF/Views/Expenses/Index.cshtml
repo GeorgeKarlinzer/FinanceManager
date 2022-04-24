@@ -1,0 +1,92 @@
+﻿@model IEnumerable<TestEF.Models.Expense>
+
+@{
+	ViewData["Title"] = "Expenses";
+}
+<body>
+	<h1>Expenses</h1>
+	<p>
+		<a asp-action="Create">Create New</a>
+	</p>
+	<table class="table" id="expensesTable">
+		<thead>
+			<tr>
+				@{
+					var label = nameof(Expense.Label);
+					var description = nameof(Expense.Description);
+					var amount = nameof(Expense.Amount);
+					var category = nameof(Expense.Category);
+					var date = nameof(Expense.Date);
+				} 
+				<th>
+					<label onclick="sortTableBy('@label')">@label</label>
+				</th>
+				<th>
+					<label onclick="sortTableBy('@description')">@description</label>
+				</th>
+				<th>
+					<label onclick="sortTableBy('@amount')">@amount</label>
+				</th>
+				<th>
+					<label onclick="sortTableBy('@category')">@category</label>
+@*					<select id="test" multiple>
+						<option value="1">One</option>
+						<option value="2">Two</option>
+						<option value="3">Three</option>
+						<option value="4">Four</option>
+					</select>*@
+
+
+				</th>
+				<th>
+					<label onclick="sortTableBy('@date')">@date</label>
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody id="expensesTableBody">
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Label)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Description)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Amount)
+					</td>
+					<td>
+						<span style="color:@item.Category.ColorCode">@item.Category.Name</span>
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Date)
+					</td>
+					<td>
+						<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+						<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+						<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</body>
+<script>
+	var options = [].slice.call(document.querySelectorAll("option"));
+
+	options.forEach(function (element)
+	{
+		element.addEventListener("mousedown", 
+			function (e)
+			{
+				e.preventDefault();
+				element.parentElement.focus();
+				this.selected = !this.selected;
+				return false;
+			}
+			, false
+		);
+	});
+</script>
